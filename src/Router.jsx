@@ -10,6 +10,7 @@ import {
 import { IndexPage } from "./Pages/Index.page";
 import { DashboardPage } from "./Pages/Dashboard.page";
 import { MembersPage } from "./Pages/Members.page";
+import { FormManagerPage } from "./Pages/FormManager.page";
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: "/members",
     exact: true,
     Component: MembersPage,
+  },
+  {
+    path: "/form_manager",
+    exact: true,
+    Component: FormManagerPage,
   },
 ];
 

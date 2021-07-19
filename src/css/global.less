@@ -1,0 +1,180 @@
+.indexPage_body {
+  width: 100%;
+  min-height: 100vh;
+  background: rgb(178, 254, 255);
+  background: -moz-linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  background: linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b2feff",endColorstr="#cf9fff",GradientType=1);
+}
+
+.login-input {
+  border-radius: 25px;
+  height: 40px;
+  background-color: #f5eeff;
+}
+
+.ant-form {
+  .ant-input {
+    border-radius: 25px;
+    height: 34px;
+    // background-color: #f5eeff;
+  }
+  .ant-select-selector {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+  }
+  .ant-picker {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+  }
+}
+.form-input {
+  border-radius: 25px;
+  height: 40px;
+  background-color: #f5eeff;
+}
+
+p {
+  font-family: Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+span {
+  font-family: Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+p.formTitle {
+  color: #a04c97;
+}
+
+.members_element {
+  height: 70px !important;
+  background-color: #c18fff !important;
+  color: white;
+  span {
+    font-weight: 400 !important;
+    letter-spacing: 3px;
+    font-size: 18px;
+  }
+}
+
+.downloadxlsx_button {
+  background-color: #c18fff !important;
+  color: white;
+  span {
+    font-weight: 400 !important;
+    letter-spacing: 3px;
+  }
+}
+
+.dashboard_sidebar {
+  min-height: 100vh;
+  background: rgb(178, 254, 255);
+  background: -moz-linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  background: linear-gradient(
+    0deg,
+    rgba(178, 254, 255, 1) 0%,
+    rgba(207, 159, 255, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b2feff",endColorstr="#cf9fff",GradientType=1);
+}
+
+.members_table {
+  thead {
+    margin-bottom: 50px !important;
+    background-color: #e5e5e5;
+    th:first-child {
+      -webkit-box-shadow: #c2c2c2 0 5px 0px;
+      box-shadow: #c2c2c2 0 5px 0px;
+      border-top-left-radius: 25px !important;
+      border-bottom-left-radius: 25px !important;
+    }
+    th {
+      -webkit-box-shadow: #c2c2c2 0 5px 0px;
+      box-shadow: #c2c2c2 0 5px 0px;
+    }
+    th:last-child {
+      -webkit-box-shadow: #c2c2c2 0 5px 0px;
+      box-shadow: #c2c2c2 0 5px 0px;
+      border-top-right-radius: 25px !important;
+      border-bottom-right-radius: 25px !important;
+    }
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    .ant-checkbox {
+      border-spacing: 0 0px !important;
+    }
+  }
+
+  .members_table_checkbox {
+    .ant-checkbox {
+      border-spacing: 0 0px !important;
+
+      .ant-checkbox-inner {
+        border-radius: 25px !important;
+        border-width: 0;
+        background-color: #e92121;
+      }
+      &.ant-checkbox-checked {
+        .ant-checkbox-inner {
+          border-radius: 25px !important;
+          border-width: 0;
+          background-color: #9fea21 !important;
+        }
+      }
+    }
+  }
+
+  tbody:before {
+    content: "@";
+    display: block;
+    line-height: 20px;
+    text-indent: -99999px;
+  }
+
+  tbody {
+    tr:hover td {
+      background-color: #c18fff !important;
+    }
+    tr {
+      margin-bottom: 10px !important;
+
+      td:first-child {
+        border-top-left-radius: 25px !important;
+        border-bottom-left-radius: 25px !important;
+      }
+      td:last-child {
+        border-top-right-radius: 25px !important;
+        border-bottom-right-radius: 25px !important;
+      }
+      background-color: #f5eeff !important;
+    }
+  }
+}

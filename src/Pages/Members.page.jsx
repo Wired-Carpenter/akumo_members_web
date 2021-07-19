@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Button, Row, Col, Table, Checkbox, Input, Pagination } from "antd";
+import { Button, Row, Col, Table, Checkbox, Input, Tabs } from "antd";
 import { useHistory, useLocation } from "react-router-dom";
+import { UserOutlined } from "@ant-design/icons";
 import qs from "query-string";
 
 import {
   SearchOutlined,
   CheckOutlined,
   CloseOutlined,
+  UserAddOutlined,
   DownloadOutlined,
 } from "@ant-design/icons";
 
 // Components
-import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
 
 //
 import { axios } from "../core/axios";
+
+const { TabPane } = Tabs;
 
 export const MembersPage = () => {
   const [data, setData] = useState([]);
@@ -77,327 +81,381 @@ export const MembersPage = () => {
   };
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <DashboardHeader />
-      <Row justify="center" style={{ width: "100%", height: "92%" }}>
-        <Col span={22} style={{ marginTop: "20px" }}>
-          <p style={{ fontWeight: "bold", fontSize: "24px" }}>General</p>
-          <Row justify="end" style={{ marginBottom: "5px" }}>
-            <Row style={{ marginRight: "20px" }}>
-              <Input
-                style={{ width: "180px" }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+    <Row
+      justify="center"
+      style={{ width: "100%", minHeight: "100vh" }}
+      className="indexPage_body"
+    >
+      <Col span={4}>
+        <DashboardSidebar />
+      </Col>
+      <Col
+        span={20}
+        style={{ backgroundColor: "white", paddingLeft: 40, paddingRight: 40 }}
+      >
+        <Row justify="space-between" style={{ marginTop: 80 }}>
+          <Col>
+            <p style={{ fontWeight: "bold", fontSize: "38px", float: "left" }}>
+              Members
+            </p>
+          </Col>
+          <Col style={{ flexGrow: "1" }}></Col>
+          <Col>
+            <Row align="middle">
+              <UserAddOutlined
+                style={{ fontSize: 28, color: "#1f7bbf", marginRight: 30 }}
+                onClick={addMember}
               />
-              <Button
-                icon={<SearchOutlined />}
-                type="primary"
+
+              <SearchOutlined
+                style={{ fontSize: 28, color: "#1f7bbf" }}
                 onClick={() =>
                   history.push({
                     pathname: location.pathname,
                     search: qs.stringify({ q: search }),
                   })
                 }
-              ></Button>
+              />
+              <Input
+                style={{ width: "180px", marginRight: 30 }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+
+              <Button
+                shape="circle"
+                shape="round"
+                type="primary"
+                icon={<UserOutlined style={{ fontSize: 16 }} />}
+                onClick={() => history.push("/admin")}
+              >
+                <span>Admin</span>
+              </Button>
             </Row>
-            <Button type="primary" onClick={addMember}>
-              Add member
-            </Button>
-          </Row>
-          <Row justify="center">
-            <Table
-              style={{ width: "100%" }}
-              dataSource={data}
-              rowKey="id"
-              pagination={{
-                pageSize: size,
-                current: page,
-                total: pagination.total,
-                showSizeChanger: true,
-                onChange: (page, size) =>
-                  history.push({
-                    pathname: location.pathname,
-                    search: qs.stringify({ ...qry, page, size }),
-                  }),
-              }}
-              columns={[
-                {
-                  title: false,
-                  key: 0,
-                  render: (item) => {
-                    return (
-                      <Checkbox
-                        checked={selectedIds.includes(item.id)}
-                        onChange={() => toggleSelectedId(item.id)}
-                      />
-                    );
-                  },
+          </Col>
+        </Row>
+        <Row justify="space-between">
+          <Tabs defaultActiveKey="1" size={32}>
+            <TabPane tab="All members" key="1"></TabPane>
+            <TabPane tab="Linux" key="2"></TabPane>
+            <TabPane tab="Terraform" key="3"></TabPane>
+            <TabPane tab="Jenkins" key="4"></TabPane>
+            <TabPane tab="AWS" key="5"></TabPane>
+            <TabPane tab="Ansible" key="6"></TabPane>
+            <TabPane tab="Docker" key="7"></TabPane>
+          </Tabs>
+        </Row>
+        <Row justify="center">
+          <Table
+            className="members_table"
+            style={{ width: "100%" }}
+            dataSource={data}
+            rowKey="id"
+            pagination={{
+              pageSize: size,
+              current: page,
+              total: pagination.total,
+              showSizeChanger: true,
+              onChange: (page, size) =>
+                history.push({
+                  pathname: location.pathname,
+                  search: qs.stringify({ ...qry, page, size }),
+                }),
+            }}
+            columns={[
+              {
+                title: "Select",
+                key: 0,
+                render: (item) => {
+                  return (
+                    <Checkbox
+                      checked={selectedIds.includes(item.id)}
+                      onChange={() => toggleSelectedId(item.id)}
+                    />
+                  );
                 },
-                {
-                  title: "Member ID",
-                  key: 1,
-                  render: (item) => {
-                    return (
-                      <div onDoubleClick={() => setEditing(true)}>
-                        {item.id}
-                      </div>
-                    );
-                  },
+              },
+              {
+                title: "Member ID",
+                key: 1,
+                render: (item) => {
+                  return (
+                    <div onDoubleClick={() => setEditing(true)}>{item.id}</div>
+                  );
                 },
-                {
-                  title: "First Name",
-                  key: 2,
-                  render: (item) => {
-                    const [editing, setEditing] = useState(false);
-                    const [firstName, setFirstName] = useState(item.first_name);
-                    useEffect(() => {
-                      if (editing) setFirstName(item.first_name);
-                    }, [editing]);
-                    return (
-                      <>
-                        {editing ? (
-                          <div>
-                            <input
-                              value={firstName}
-                              className="mr-5"
-                              onChange={(e) => setFirstName(e.target.value)}
-                            />
-                            <Button
-                              icon={<CloseOutlined />}
-                              className="mr-5"
-                              onClick={() => {
-                                setEditing(false);
-                                setLastName(item.first_name);
-                              }}
-                            ></Button>
-                            <Button
-                              icon={<CheckOutlined />}
-                              onClick={() => {
-                                changeState(item.id, "first_name", firstName);
-                                setEditing(false);
-                                setLastName(item.first_name);
-                              }}
-                            ></Button>
-                          </div>
-                        ) : (
-                          <div onDoubleClick={() => setEditing(true)}>
-                            {item.first_name}
-                          </div>
-                        )}
-                      </>
-                    );
-                  },
+              },
+              {
+                title: "First Name",
+                key: 2,
+                render: (item) => {
+                  const [editing, setEditing] = useState(false);
+                  const [firstName, setFirstName] = useState(item.first_name);
+                  useEffect(() => {
+                    if (editing) setFirstName(item.first_name);
+                  }, [editing]);
+                  return (
+                    <>
+                      {editing ? (
+                        <div>
+                          <input
+                            value={firstName}
+                            className="mr-5"
+                            onChange={(e) => setFirstName(e.target.value)}
+                          />
+                          <Button
+                            icon={<CloseOutlined />}
+                            className="mr-5"
+                            onClick={() => {
+                              setEditing(false);
+                              setLastName(item.first_name);
+                            }}
+                          ></Button>
+                          <Button
+                            icon={<CheckOutlined />}
+                            onClick={() => {
+                              changeState(item.id, "first_name", firstName);
+                              setEditing(false);
+                              setLastName(item.first_name);
+                            }}
+                          ></Button>
+                        </div>
+                      ) : (
+                        <div onDoubleClick={() => setEditing(true)}>
+                          {item.first_name}
+                        </div>
+                      )}
+                    </>
+                  );
                 },
-                {
-                  title: "Last Name",
-                  key: 2,
-                  render: (item) => {
-                    const [editing, setEditing] = useState(false);
+              },
+              {
+                title: "Last Name",
+                key: 2,
+                render: (item) => {
+                  const [editing, setEditing] = useState(false);
 
-                    const [lastName, setLastName] = useState(item.last_name);
-                    useEffect(() => {
-                      if (editing) setLastName(item.last_name);
-                    }, [editing]);
+                  const [lastName, setLastName] = useState(item.last_name);
+                  useEffect(() => {
+                    if (editing) setLastName(item.last_name);
+                  }, [editing]);
 
-                    return (
-                      <>
-                        {editing ? (
-                          <div>
-                            <input
-                              value={lastName}
-                              className="mr-5"
-                              onChange={(e) => setLastName(e.target.value)}
-                            />
-                            <Button
-                              icon={<CloseOutlined />}
-                              className="mr-5"
-                              onClick={() => {
-                                setEditing(false);
-                                setLastName(item.last_name);
-                              }}
-                            ></Button>
-                            <Button
-                              icon={<CheckOutlined />}
-                              onClick={() => {
-                                changeState(item.id, "last_name", lastName);
-                                setEditing(false);
-                                setLastName(item.last_name);
-                              }}
-                            ></Button>
-                          </div>
-                        ) : (
-                          <div onDoubleClick={() => setEditing(true)}>
-                            {item.last_name}
-                          </div>
-                        )}
-                      </>
-                    );
-                  },
+                  return (
+                    <>
+                      {editing ? (
+                        <div>
+                          <input
+                            value={lastName}
+                            className="mr-5"
+                            onChange={(e) => setLastName(e.target.value)}
+                          />
+                          <Button
+                            icon={<CloseOutlined />}
+                            className="mr-5"
+                            onClick={() => {
+                              setEditing(false);
+                              setLastName(item.last_name);
+                            }}
+                          ></Button>
+                          <Button
+                            icon={<CheckOutlined />}
+                            onClick={() => {
+                              changeState(item.id, "last_name", lastName);
+                              setEditing(false);
+                              setLastName(item.last_name);
+                            }}
+                          ></Button>
+                        </div>
+                      ) : (
+                        <div onDoubleClick={() => setEditing(true)}>
+                          {item.last_name}
+                        </div>
+                      )}
+                    </>
+                  );
                 },
-                {
-                  title: "Status",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.status}
-                        onChange={(e) =>
-                          changeState(item.id, "status", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Slack",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.slack}
-                        onChange={(e) =>
-                          changeState(item.id, "slack", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Teachable",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.teachable}
-                        onChange={(e) =>
-                          changeState(item.id, "teachable", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Linux",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.linux}
-                        onChange={(e) =>
-                          changeState(item.id, "linux", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "AWS",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.aws}
-                        onChange={(e) =>
-                          changeState(item.id, "aws", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Ansible",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.ansible}
-                        onChange={(e) =>
-                          changeState(item.id, "ansible", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Terraform",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.terraform}
-                        onChange={(e) =>
-                          changeState(item.id, "terraform", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Git",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.git}
-                        onChange={(e) =>
-                          changeState(item.id, "git", e.target.checked)
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Cloudformation",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.cloudformation}
-                        onChange={(e) =>
-                          changeState(
-                            item.id,
-                            "cloudformation",
-                            e.target.checked
-                          )
-                        }
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Career coaching",
-                  key: 2,
-                  render: (item) => (
-                    <div>
-                      <Checkbox
-                        checked={item.career_coaching}
-                        onChange={(e) =>
-                          changeState(
-                            item.id,
-                            "career_coaching",
-                            e.target.checked
-                          )
-                        }
-                      />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </Row>
-          <Row justify="end">
-            <Checkbox
-              checked={toDownloadSelected}
-              onChange={(e) => setToDownloadSelected(e.target.checked)}
-            >
-              Download checked members only
-            </Checkbox>
-            <Button icon={<DownloadOutlined />} onClick={downloadXLSX}>
-              Download XLSX
-            </Button>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+              },
+              {
+                title: "Status",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      className="members_table_checkbox"
+                      checked={item.status}
+                      onChange={(e) =>
+                        changeState(item.id, "status", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Slack",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.slack}
+                      onChange={(e) =>
+                        changeState(item.id, "slack", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Teachable",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.teachable}
+                      onChange={(e) =>
+                        changeState(item.id, "teachable", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Linux",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.linux}
+                      onChange={(e) =>
+                        changeState(item.id, "linux", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "AWS",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.aws}
+                      onChange={(e) =>
+                        changeState(item.id, "aws", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Ansible",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.ansible}
+                      onChange={(e) =>
+                        changeState(item.id, "ansible", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Terraform",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.terraform}
+                      onChange={(e) =>
+                        changeState(item.id, "terraform", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Git",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.git}
+                      onChange={(e) =>
+                        changeState(item.id, "git", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Cloudformation",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.cloudformation}
+                      onChange={(e) =>
+                        changeState(item.id, "cloudformation", e.target.checked)
+                      }
+                    />
+                  </Row>
+                ),
+              },
+              {
+                title: "Career coaching",
+                key: 2,
+                render: (item) => (
+                  <Row justify="center" align="middle">
+                    <Checkbox
+                      className="members_table_checkbox"
+                      checked={item.career_coaching}
+                      onChange={(e) =>
+                        changeState(
+                          item.id,
+                          "career_coaching",
+                          e.target.checked
+                        )
+                      }
+                    />
+                  </Row>
+                ),
+              },
+            ]}
+          />
+        </Row>
+        <Row justify="start">
+          <Col span={4}>
+            <Row justify="center" align="middle">
+              <Checkbox
+                checked={toDownloadSelected}
+                onChange={(e) => setToDownloadSelected(e.target.checked)}
+              >
+                checked members
+              </Checkbox>
+            </Row>
+            <Row justify="center" align="middle">
+              <Button
+                htmlType="button"
+                shape="round"
+                className="downloadxlsx_button"
+                icon={<DownloadOutlined />}
+                onClick={downloadXLSX}
+              >
+                <span> Download XLSX</span>
+              </Button>
+            </Row>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 };
