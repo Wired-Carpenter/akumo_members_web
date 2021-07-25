@@ -28,7 +28,7 @@ export const MembersPage = () => {
   const history = useHistory();
   const location = useLocation();
   const qry = qs.parse(location.search);
-  const { q, page = 1, size = 20 } = qry;
+  const { q, page = 1, size = 20, type = "" } = qry;
   const [pagination, setPagination] = useState({
     total: 1,
   });
@@ -44,6 +44,7 @@ export const MembersPage = () => {
   const fetchMembers = async (q) => {
     const query = { ...pagination };
     if (q) query.q = q;
+    if (type) query.type = type;
     const members = await axios.get(`/members?${qs.stringify(query)}`);
     setData(members?.data?.data);
     setPagination({ ...pagination, total: members?.data?.count || 1 });
@@ -51,7 +52,7 @@ export const MembersPage = () => {
 
   useEffect(() => {
     fetchMembers(q);
-  }, [q]);
+  }, [q, type]);
 
   const addMember = async () => {
     await axios.post("/members");
@@ -135,14 +136,30 @@ export const MembersPage = () => {
           </Col>
         </Row>
         <Row justify="space-between">
-          <Tabs defaultActiveKey="1" size={32}>
-            <TabPane tab="All members" key="1"></TabPane>
-            <TabPane tab="Linux" key="2"></TabPane>
-            <TabPane tab="Terraform" key="3"></TabPane>
-            <TabPane tab="Jenkins" key="4"></TabPane>
-            <TabPane tab="AWS" key="5"></TabPane>
-            <TabPane tab="Ansible" key="6"></TabPane>
-            <TabPane tab="Docker" key="7"></TabPane>
+          <Tabs
+            activeKey={type}
+            onChange={(e) => {
+              console.log(location.pathname);
+              history.push({
+                pathname: location.pathname,
+                search: qs.stringify({
+                  ...qry,
+                  type: e,
+                }),
+              });
+            }}
+            size={32}
+          >
+            <TabPane tab="All members" key=""></TabPane>
+            <TabPane tab="Slack" key="slack"></TabPane>
+            <TabPane tab="Teachable" key="teachable"></TabPane>
+            <TabPane tab="Linux" key="linux"></TabPane>
+            <TabPane tab="AWS" key="aws"></TabPane>
+            <TabPane tab="Ansible" key="ansible"></TabPane>
+            <TabPane tab="Terraform" key="terraform"></TabPane>
+            <TabPane tab="Git" key="git"></TabPane>
+            <TabPane tab="Cloudformation" key="cloudformation"></TabPane>
+            <TabPane tab="Carrer coaching" key="career_coaching"></TabPane>
           </Tabs>
         </Row>
         <Row justify="center">
@@ -207,7 +224,7 @@ export const MembersPage = () => {
                             className="mr-5"
                             onClick={() => {
                               setEditing(false);
-                              setLastName(item.first_name);
+                              setFirstName(item.first_name);
                             }}
                           ></Button>
                           <Button
@@ -215,7 +232,7 @@ export const MembersPage = () => {
                             onClick={() => {
                               changeState(item.id, "first_name", firstName);
                               setEditing(false);
-                              setLastName(item.first_name);
+                              setFirstName(item.first_name);
                             }}
                           ></Button>
                         </div>

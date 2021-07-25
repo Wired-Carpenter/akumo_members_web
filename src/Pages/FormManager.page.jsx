@@ -6,9 +6,11 @@ import {
   FileAddOutlined,
   EditOutlined,
   DeleteOutlined,
+  ExportOutlined,
 } from "@ant-design/icons";
 import qs from "query-string";
 import moment from "moment";
+import _ from "lodash";
 
 import {
   SearchOutlined,
@@ -74,12 +76,34 @@ export const FormManagerPage = () => {
   const addForm = async (values) => {
     console.log(values);
     const { start_date, end_date, ..._values } = values;
-    const result = await axios.post("/forms", {
-      ..._values,
-      start_date: moment(start_date).startOf("day").format("YYYY-MM-DD HH:mm"),
-      end_date: moment(end_date).endOf("day").format("YYYY-MM-DD HH:mm"),
-    });
+    if (editData) {
+      const result = await axios.post("/forms/update", {
+        ..._.omit(editData, "created_at"),
+        ..._values,
+        start_date: moment(start_date)
+          .startOf("day")
+          .format("YYYY-MM-DD HH:mm"),
+        end_date: moment(end_date).endOf("day").format("YYYY-MM-DD HH:mm"),
+      });
+    } else {
+      const result = await axios.post("/forms", {
+        ..._values,
+        start_date: moment(start_date)
+          .startOf("day")
+          .format("YYYY-MM-DD HH:mm"),
+        end_date: moment(end_date).endOf("day").format("YYYY-MM-DD HH:mm"),
+      });
+    }
+
     setShowAddFormModal(false);
+    setEditData(null);
+    await fetchForms();
+  };
+
+  const deleteForm = async (id) => {
+    const result = await axios.post("/forms/delete", {
+      id,
+    });
     await fetchForms();
   };
 
@@ -189,7 +213,7 @@ export const FormManagerPage = () => {
                   title: "Type",
                   key: 1,
                   render: (item) => (
-                    <Row justify="center" align="middle">
+                    <Row justify="start" align="middle">
                       <span>{item.type}</span>
                     </Row>
                   ),
@@ -288,7 +312,7 @@ export const FormManagerPage = () => {
                   title: "End Date",
                   key: 4,
                   render: (item) => (
-                    <Row justify="center" align="middle">
+                    <Row justify="start" align="middle">
                       {moment(item.end_date).format("YYYY-MM-DD")}
                     </Row>
                   ),
@@ -297,7 +321,7 @@ export const FormManagerPage = () => {
                   title: "Status",
                   key: 5,
                   render: (item) => (
-                    <Row justify="center" align="middle">
+                    <Row justify="start" align="middle">
                       {item.status}
                     </Row>
                   ),
@@ -306,7 +330,17 @@ export const FormManagerPage = () => {
                   title: "Actions",
                   key: 6,
                   render: (item) => (
-                    <Row justify="center" align="middle">
+                    <Row justify="start" align="middle">
+                      <ExportOutlined
+                        style={{
+                          fontSize: 20,
+                          color: "#1f7bbf",
+                          marginRight: 30,
+                        }}
+                        onClick={() => {
+                          window.open(`/register/${item.type}?t=${item.token}`);
+                        }}
+                      />
                       <EditOutlined
                         style={{
                           fontSize: 20,
@@ -332,6 +366,7 @@ export const FormManagerPage = () => {
                           Modal.confirm({
                             title: "Delete form",
                             content: "Are you sure?",
+                            onOk: () => deleteForm(item.id),
                           });
                         }}
                       />

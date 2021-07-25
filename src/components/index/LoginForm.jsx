@@ -4,25 +4,26 @@ import { useHistory } from "react-router-dom";
 
 const { useForm } = Form;
 
-export const LoginForm = () => {
+export const LoginForm = ({ onFinish = () => {} }) => {
   const [form] = useForm();
   const history = useHistory();
 
   return (
-    <Form
-      form={form}
-      onFinish={() => {
-        history.push("/admin");
-      }}
-    >
+    <Form form={form} onFinish={onFinish}>
       <Row justify="center" style={{ width: "100%" }}>
         <Col span={20}>
           <p className="formTitle">username</p>
-          <Form.Item name="username">
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Please fill username field" }]}
+          >
             <Input className="login-input" />
           </Form.Item>
           <p className="formTitle">password</p>
-          <Form.Item name="password">
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please fill password field" }]}
+          >
             <Input type="password" className="login-input" />
           </Form.Item>
           <Row justify="space-between">

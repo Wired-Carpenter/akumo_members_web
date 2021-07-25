@@ -1,22 +1,13 @@
 import React from "react";
 
-import { Menu, Row, Button } from "antd";
+import { Row, Button } from "antd";
 import { TeamOutlined, FormOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-
-const { SubMenu } = Menu;
 
 export const DashboardSidebar = () => {
   const history = useHistory();
   return (
-    <Menu
-      className="dashboard_sidebar"
-      onClick={() => {}}
-      style={{ width: "100%", height: "100%" }}
-      defaultSelectedKeys={[]}
-      defaultOpenKeys={[]}
-      mode="inline"
-    >
+    <div className="dashboard_sidebar">
       <Row align="middle" justify="center">
         <img
           src="images/logo_tp.png"
@@ -27,11 +18,10 @@ export const DashboardSidebar = () => {
       </Row>
       <Row align="middle" justify="center" style={{ marginTop: "24px" }}>
         <div style={{ textAlign: "center", color: "white", fontSize: "24px" }}>
-          <p>AKUMO</p>
+          <p style={{ marginBottom: 0 }}>AKUMO</p>
           <p>SOLUTIONS</p>
         </div>
       </Row>
-      {/* <Menu.Item key="4"> */}
       <Row align="middle" justify="center" style={{ marginTop: "24px" }}>
         <Button
           htmlType="button"
@@ -39,7 +29,7 @@ export const DashboardSidebar = () => {
           className="members_element"
           icon={<TeamOutlined style={{ fontSize: 24 }} />}
           onClick={() => history.push("/members")}
-          style={{ height: "60px", width: "80%" }}
+          style={{ height: "60px", width: "85%" }}
         >
           <span>Members</span>
         </Button>
@@ -51,12 +41,11 @@ export const DashboardSidebar = () => {
           className="members_element"
           icon={<FormOutlined style={{ fontSize: 24 }} />}
           onClick={() => history.push("/form_manager")}
-          style={{ height: "60px", width: "80%" }}
+          style={{ height: "60px", width: "85%" }}
         >
-          <span>Form manager</span>
+          <span style={{ wordBreak: "break-word" }}>Form manager</span>
         </Button>
       </Row>
-      {/* </Menu.Item> */}
-    </Menu>
+    </div>
   );
 };
