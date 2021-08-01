@@ -92,7 +92,10 @@ export const LinuxForm = () => {
   const onFinish = async (values) => {
     console.log(values);
 
-    const result = await axios.post("/form/linux", values);
+    const result = await axios.post("/form/linux", {
+      ...values,
+      form_id: formInfo.id,
+    });
 
     form.resetFields();
     Modal.info({

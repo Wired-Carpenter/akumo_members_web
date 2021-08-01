@@ -7,41 +7,37 @@ import { TeamOutlined, UserOutlined } from "@ant-design/icons";
 const { Panel } = Collapse;
 
 // Components
-import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import { FormMembersModal } from "../components/dashboard/FormMembersModal";
 
-const Batch = ({ title, imgSrc }) => {
-  const [showCollapse, setShowCollapse] = useState(false);
-  const months = [0, 1, 2, 3, 4, 5, 6].map((e) =>
-    moment().add(e, "month").format("YYYY/MM")
-  );
+const Batch = ({ showModal, ...props }) => {
+  const { title, disabled, imgSrc } = props;
   return (
     <Col span={8} style={{ padding: "20px" }}>
       <Button
         htmlType="button"
         shape="round"
         className="members_element"
+        disabled={disabled}
         icon={imgSrc ? <img src={imgSrc} height={24} className="mr-5" /> : null}
-        onClick={() => setShowCollapse(!showCollapse)}
+        onClick={() => showModal(props)}
         style={{ height: "60px", width: "100%" }}
       >
         <span>{title}</span>
       </Button>
-      {showCollapse && (
-        <Collapse>
-          {months.map((m, idx) => (
-            <Panel header={m} key={idx}>
-              <p>Coming soon</p>
-            </Panel>
-          ))}
-        </Collapse>
-      )}
     </Col>
   );
 };
 
 export const DashboardPage = () => {
   const history = useHistory();
+  const [formMembersModalVisible, setFormMembersModalVisible] = useState(false);
+  const [formMembersModalData, setFormMembersModalData] = useState(null);
 
+  const showModal = (props) => {
+    console.log(props);
+    setFormMembersModalVisible(true);
+    setFormMembersModalData(props);
+  };
   return (
     <Row justify="center" align="center" className="indexPage_body">
       <div
@@ -79,17 +75,34 @@ export const DashboardPage = () => {
           <Col span={24}>
             <Row justify="center">
               {[
-                { title: "LINUX", imgSrc: "images/linux_logo.png" },
+                {
+                  title: "LINUX",
+                  type: "linux",
+                  imgSrc: "images/linux_logo.png",
+                },
                 {
                   title: "DOCKER",
+                  disabled: true,
                   imgSrc: "images/docker_kubernetes_logo.png",
                 },
-                { title: "TERRAFORM", imgSrc: "images/terraform_logo.png" },
-                { title: "ANSIBLE", imgSrc: "images/ansible_logo.png" },
-                { title: "AWS", imgSrc: "images/aws_logo.png" },
-                { title: "JENKINS", imgSrc: "images/jenkins_logo.png" },
+                {
+                  title: "TERRAFORM",
+                  disabled: true,
+                  imgSrc: "images/terraform_logo.png",
+                },
+                {
+                  title: "ANSIBLE",
+                  disabled: true,
+                  imgSrc: "images/ansible_logo.png",
+                },
+                { title: "AWS", disabled: true, imgSrc: "images/aws_logo.png" },
+                {
+                  title: "JENKINS",
+                  disabled: true,
+                  imgSrc: "images/jenkins_logo.png",
+                },
               ].map((e, idx) => (
-                <Batch {...e} key={idx} />
+                <Batch {...e} key={idx} showModal={showModal} />
               ))}
             </Row>
           </Col>
@@ -105,6 +118,13 @@ export const DashboardPage = () => {
       >
         <span>Admin</span>
       </Button>
+      {formMembersModalVisible && (
+        <FormMembersModal
+          visible={formMembersModalVisible}
+          data={formMembersModalData}
+          onHide={() => setFormMembersModalVisible(false)}
+        />
+      )}
     </Row>
   );
 };

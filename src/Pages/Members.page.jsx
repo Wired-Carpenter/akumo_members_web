@@ -298,7 +298,6 @@ export const MembersPage = () => {
                   <Row justify="center" align="middle">
                     <Checkbox
                       className="members_table_checkbox"
-                      className="members_table_checkbox"
                       checked={item.status}
                       onChange={(e) =>
                         changeState(item.id, "status", e.target.checked)
