@@ -142,6 +142,7 @@ export const LinuxForm = () => {
           </Col>
           <Col span={12}>
             <div style={{ fontSize: "18px" }}>
+              <p>Title: {formInfo?.title}</p>
               <p>
                 Start Date: {moment(formInfo?.start_date).format("YYYY-MM-DD")}
               </p>

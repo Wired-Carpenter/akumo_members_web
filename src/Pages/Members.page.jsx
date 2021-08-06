@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Row, Col, Table, Checkbox, Input, Tabs } from "antd";
+import { Button, Row, Col, Table, Checkbox, Input, Tabs, Badge } from "antd";
 import { useHistory, useLocation } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, CaretRightOutlined } from "@ant-design/icons";
 import qs from "query-string";
 
 import {
@@ -19,6 +19,7 @@ import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
 import { axios } from "../core/axios";
 
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 export const MembersPage = () => {
   const [data, setData] = useState([]);
@@ -195,6 +196,7 @@ export const MembersPage = () => {
               {
                 title: "Member ID",
                 key: 1,
+                width: 110,
                 render: (item) => {
                   return (
                     <div onDoubleClick={() => setEditing(true)}>{item.id}</div>
@@ -213,13 +215,14 @@ export const MembersPage = () => {
                   return (
                     <>
                       {editing ? (
-                        <div>
-                          <input
+                        <div style={{ display: "flex", maxWidth: 220 }}>
+                          <Input
                             value={firstName}
-                            className="mr-5"
+                            className="mr-5 a-input"
                             onChange={(e) => setFirstName(e.target.value)}
                           />
                           <Button
+                            size="small"
                             icon={<CloseOutlined />}
                             className="mr-5"
                             onClick={() => {
@@ -228,6 +231,7 @@ export const MembersPage = () => {
                             }}
                           ></Button>
                           <Button
+                            size="small"
                             icon={<CheckOutlined />}
                             onClick={() => {
                               changeState(item.id, "first_name", firstName);
@@ -247,7 +251,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Last Name",
-                key: 2,
+                key: 3,
                 render: (item) => {
                   const [editing, setEditing] = useState(false);
 
@@ -259,13 +263,14 @@ export const MembersPage = () => {
                   return (
                     <>
                       {editing ? (
-                        <div>
-                          <input
+                        <div style={{ display: "flex", maxWidth: 220 }}>
+                          <Input
                             value={lastName}
-                            className="mr-5"
+                            className="mr-5 a-input"
                             onChange={(e) => setLastName(e.target.value)}
                           />
                           <Button
+                            size="small"
                             icon={<CloseOutlined />}
                             className="mr-5"
                             onClick={() => {
@@ -274,6 +279,7 @@ export const MembersPage = () => {
                             }}
                           ></Button>
                           <Button
+                            size="small"
                             icon={<CheckOutlined />}
                             onClick={() => {
                               changeState(item.id, "last_name", lastName);
@@ -293,7 +299,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Status",
-                key: 2,
+                key: 4,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -308,7 +314,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Slack",
-                key: 2,
+                key: 5,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -323,7 +329,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Teachable",
-                key: 2,
+                key: 6,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -338,22 +344,40 @@ export const MembersPage = () => {
               },
               {
                 title: "Linux",
-                key: 2,
+                key: 7,
                 render: (item) => (
                   <Row justify="center" align="middle">
-                    <Checkbox
-                      className="members_table_checkbox"
-                      checked={item.linux}
-                      onChange={(e) =>
-                        changeState(item.id, "linux", e.target.checked)
+                    <Badge
+                      count={
+                        item.linux_token && (
+                          <CaretRightOutlined
+                            rotate={-45}
+                            style={{
+                              color: "#1f7bbf",
+                            }}
+                            onClick={() => {
+                              window.open(
+                                `/register/linux?t=${item.linux_token}`
+                              );
+                            }}
+                          />
+                        )
                       }
-                    />
+                    >
+                      <Checkbox
+                        className="members_table_checkbox"
+                        checked={item.linux}
+                        onChange={(e) =>
+                          changeState(item.id, "linux", e.target.checked)
+                        }
+                      />
+                    </Badge>
                   </Row>
                 ),
               },
               {
                 title: "AWS",
-                key: 2,
+                key: 8,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -368,7 +392,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Ansible",
-                key: 2,
+                key: 9,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -383,7 +407,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Terraform",
-                key: 2,
+                key: 10,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -398,7 +422,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Git",
-                key: 2,
+                key: 11,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -413,7 +437,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Cloudformation",
-                key: 2,
+                key: 12,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -428,7 +452,7 @@ export const MembersPage = () => {
               },
               {
                 title: "Career coaching",
-                key: 2,
+                key: 13,
                 render: (item) => (
                   <Row justify="center" align="middle">
                     <Checkbox
@@ -444,6 +468,67 @@ export const MembersPage = () => {
                     />
                   </Row>
                 ),
+              },
+              {
+                title: "Comment",
+                key: 15,
+                render: (item) => {
+                  const [editing, setEditing] = useState(false);
+                  const [firstName, setFirstName] = useState(item.comment);
+                  useEffect(() => {
+                    if (editing) setFirstName(item.comment);
+                  }, [editing]);
+                  return (
+                    <>
+                      {editing ? (
+                        <div>
+                          <TextArea
+                            value={firstName}
+                            className="mr-5"
+                            maxLength="255"
+                            rows={4}
+                            onChange={(e) => setFirstName(e.target.value)}
+                          />
+                          <div
+                            style={{
+                              display: "flex",
+                              marginTop: 5,
+                              width: "100%",
+                              justifyContent: "flex-end",
+                            }}
+                          >
+                            <Button
+                              size="small"
+                              icon={<CloseOutlined />}
+                              className="mr-5"
+                              onClick={() => {
+                                setEditing(false);
+                                setFirstName(item.comment);
+                              }}
+                            ></Button>
+                            <Button
+                              size="small"
+                              icon={<CheckOutlined />}
+                              onClick={() => {
+                                changeState(item.id, "comment", firstName);
+                                setEditing(false);
+                                setFirstName(item.comment);
+                              }}
+                            ></Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <TextArea
+                          value={item.comment}
+                          onDoubleClick={() => setEditing(true)}
+                          style={{ whiteSpace: "pre-wrap" }}
+                          readOnly
+                          rows={2}
+                        />
+                      )}
+                    </>
+                  );
+                },
               },
             ]}
           />

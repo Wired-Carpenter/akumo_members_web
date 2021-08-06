@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Row, Col, Table, Button, Checkbox, Divider } from "antd";
+import { Modal, Row, Col, Table, Button, Checkbox } from "antd";
 import { axios } from "../../core/axios";
+import { ExportOutlined } from "@ant-design/icons";
 
 export const FormMembersModal = ({ visible, data = {}, onHide }) => {
   const { title, type, imgSrc } = data;
@@ -84,6 +85,7 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
             style={{ width: "100%" }}
             style={{ minHeight: 500 }}
             pagination={false}
+            rowKey="id"
             dataSource={formMebers}
             columns={[
               {
@@ -143,7 +145,7 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
               },
               {
                 title: "Home city",
-                key: 3,
+                key: 5,
                 render: (item) => {
                   return (
                     <div onDoubleClick={() => setEditing(true)}>
@@ -154,7 +156,7 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
               },
               {
                 title: "You are:",
-                key: 3,
+                key: 6,
                 render: (item) => {
                   return (
                     <div onDoubleClick={() => setEditing(true)}>
@@ -165,7 +167,7 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
               },
               {
                 title: "Billable",
-                key: 3,
+                key: 7,
                 render: (item) => {
                   return (
                     <Checkbox
@@ -180,7 +182,7 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
               },
               {
                 title: "Paid",
-                key: 3,
+                key: 8,
                 render: (item) => {
                   return (
                     <Checkbox
@@ -193,6 +195,26 @@ export const FormMembersModal = ({ visible, data = {}, onHide }) => {
                   );
                 },
               },
+              // {
+              //   title: "Actions",
+              //   key: 9,
+              //   render: (item) => {
+              //     return (
+              //       <Row justify="start" align="middle">
+              //         <ExportOutlined
+              //           style={{
+              //             fontSize: 20,
+              //             color: "#1f7bbf",
+              //             marginRight: 30,
+              //           }}
+              //           onClick={() => {
+              //             window.open(`/register/${item.type}?t=${item.token}`);
+              //           }}
+              //         />
+              //       </Row>
+              //     );
+              //   },
+              // },
             ]}
           />
         </Col>
