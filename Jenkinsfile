@@ -26,7 +26,7 @@ node {
         tz = TimeZone. getTimeZone('CST')
         branch = env.BRANCH_NAME.replaceAll("/", "-")
         artifact_name = date.format("yyyy.MM.dd-HH.mm.ss", tz)+"-$branch-$git_commit"+".zip"
-        zip zipFile: artifact_name, archive: false, dir: 'dist/spa'
+        zip zipFile: artifact_name, archive: false, dir: 'dist'
     }
     stage("Upload artifact") {
         sh "aws s3api put-object --bucket akumo-members-crm-artifacts --key 'vite-frontend/$artifact_name' --body '$artifact_name'"
