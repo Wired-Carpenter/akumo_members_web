@@ -17,8 +17,8 @@ node {
         sh "ls -al"
     }
     stage ("upload files to s3") {
-        domain = sh(returnStdout: true, script: "aws s3 cp s3://sharedservices-terraform-backend-akumotechnology/akumo-members-crm/${deployEnv}/backend.tfstate - | jq .outputs.domain.value").replaceAll('"', '').trim()
-        sh "find . -type f | xargs sed -i 's/domain_placeholder/${domain}/g'"
+        // domain = sh(returnStdout: true, script: "aws s3 cp s3://sharedservices-terraform-backend-akumotechnology/akumo-members-crm/${deployEnv}/backend.tfstate - | jq .outputs.domain.value").replaceAll('"', '').trim()
+        // sh "find . -type f | xargs sed -i 's/domain_placeholder/${domain}/g'"
         creds = sh(returnStdout: true, script: "aws sts assume-role --role-arn arn:aws:iam::${account}:role/TerraformExecutionRole --role-session-name front-deploy")
         jsonCreds = readJSON text: creds
         withEnv([
