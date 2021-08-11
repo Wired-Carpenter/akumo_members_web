@@ -7,6 +7,10 @@ import "./css/variables.less";
 import "./css/global.less";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
+if (process.env.NODE_ENV === "production") {
+  console.log = () => {};
+}
+
 ReactDOM.render(
   // <React.StrictMode>
   <>
